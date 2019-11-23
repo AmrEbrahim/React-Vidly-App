@@ -5,14 +5,14 @@ import { login } from "../services/authService";
 
 class LoginForm extends Form {
   state = {
-    data: { username: "", password: "" },
+    data: { email: "", password: "" },
     errors: {}
   };
 
   schema = {
-    username: Joi.string()
+    email: Joi.string()
       .required()
-      .label("Username"),
+      .label("Email"),
     password: Joi.string()
       .required()
       .label("Password")
@@ -22,7 +22,7 @@ class LoginForm extends Form {
     // Call the server
     try {
       const { data: jwt } = await login(
-        this.state.data.username,
+        this.state.data.email,
         this.state.data.password
       );
       localStorage.setItem("token", jwt);
@@ -30,7 +30,7 @@ class LoginForm extends Form {
     } catch (ex) {
       if (ex.response && ex.response.status === 400) {
         const errors = { ...this.state.errors };
-        errors.username = ex.response.data;
+        errors.email = ex.response.data;
         this.setState({ errors });
       }
     }
@@ -41,7 +41,7 @@ class LoginForm extends Form {
       <div>
         <h1>Login</h1>
         <form onSubmit={this.handleSubmit}>
-          {this.renderInput("username", "Username")}
+          {this.renderInput("email", "Email")}
           {this.renderInput("password", "Password", "password")}
           {this.renderButton("Login")}
         </form>
